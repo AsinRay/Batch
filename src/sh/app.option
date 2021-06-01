@@ -1,0 +1,33 @@
+# Force using spring.profile `prod`
+#-Dspring.profiles.active=prod
+
+# urandom
+-Djava.security.egd=file:/dev/./urandom
+
+#-Djavax.net.debug=ssl
+
+## Disable jmx
+-Dspring.jmx.enabled=false
+
+-Dspring.output.ansi.enabled=always
+-Dspring.liveBeansView.mbeanDomain
+-Dspring.application.admin.enabled=true
+
+## For
+# -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=6666 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+# -Dcom.sun.management.jmxremote
+# -Dcom.sun.management.jmxremote.port=10011
+# -Dcom.sun.management.jmxremote.ssl=false
+# -Dcom.sun.management.jmxremote.authenticate=false
+
+# flags to configure Netty
+-Dio.netty.noUnsafe=true
+-Dio.netty.noKeySetOptimization=true
+-Dio.netty.leakDetection.level=paranoid
+-Dio.netty.recycler.maxCapacity=0
+-Dio.netty.recycler.maxCapacity.default=0
+-Dio.netty.recycler.maxCapacityPerThread=0
+
+# log4j 2
+-Dlog4j.shutdownHookEnabled=false
+-Dlog4j2.disable.jmx=true
