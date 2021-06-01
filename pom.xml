@@ -13,6 +13,25 @@
     <version>0.0.1</version>
     <name>job</name>
     <description>Demo project for Spring Batch</description>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>   <!-- 运行时未指明 profile,则使用默认的，该配置表示 dev为默认配置 -->
+            </activation>
+            <properties>
+                <pkg.env>dev</pkg.env>
+                <upload.dir>/Users/mac/upload/</upload.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <pkg.env>prod</pkg.env>
+                <upload.dir>/home/ubuntu/upload/</upload.dir>
+            </properties>
+        </profile>
+    </profiles>
     <properties>
         <java.version>11</java.version>
         <skipTests>true</skipTests>
@@ -84,7 +103,7 @@
                             <mainClass>cn.bittx.job.JobMain</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>. ../config/</Class-Path>
+                            <Class-Path>. ../config/ ${upload.dir} </Class-Path>
                         </manifestEntries>
                     </archive>
                     <includes>
@@ -175,6 +194,7 @@
                     <exclude>generator*</exclude>
                 </excludes>
             </resource>
+
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
@@ -185,7 +205,7 @@
                 </excludes>
                 <targetPath>${project.build.directory}/config</targetPath>
             </resource>
-
+            <!--提升目录到上级目录-->
             <resource>
                 <directory>src/main/resources/config</directory>
                 <filtering>true</filtering>
@@ -193,7 +213,7 @@
             </resource>
 
             <resource>
-                <directory>src/scripts</directory>
+                <directory>src/bin</directory>
                 <filtering>true</filtering>
                 <excludes>
                     <exclude>deployRemote.sh</exclude>
@@ -201,8 +221,9 @@
                 <targetPath>${project.build.directory}/bin</targetPath>
             </resource>
 
+            <!--用于直接在项目开发时上传发新版本-->
             <resource>
-                <directory>src/scripts</directory>
+                <directory>src/bin</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>deployRemote.sh</include>
