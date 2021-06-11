@@ -1,15 +1,13 @@
 package cn.bittx.job;
 
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
-
 @SpringBootApplication
-@EnableBatchProcessing
+
 public class JobMain {
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -20,5 +18,4 @@ public class JobMain {
         System.out.println(p1);
         SpringApplication.run(JobMain.class, args);
     }
-
 }

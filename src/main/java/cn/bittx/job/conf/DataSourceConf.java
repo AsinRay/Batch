@@ -1,32 +1,43 @@
 package cn.bittx.job.conf;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConf {
-    @Bean(name = "batchDataSource")
-    public DataSource batchDataSource() {
-        DriverManagerDataSource ds = new DriverManagerDataSource();
-        ds.setDriverClassName("org.h2.Driver");
-        ds.setUrl("jdbc:h2:~/test");
-        ds.setUsername("sa");
-        ds.setPassword("");
-        return ds;
 
-        /*return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .setScriptEncoding("UTF-8")
-                .ignoreFailedDrops(true)
-                //.generateUniqueName(true)
-                //.addScript("schema.sql")
-                //.addScripts("user_data.sql","country_data.sql")
-                .setName("Batch")
-                .build();*/
+    @Bean
+    //@ConditionalOnMissingBean(name = "dataSource")
+    @ConfigurationProperties(prefix="spring.batch.ds")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
     }
+
+
+    @Bean
+    //@ConditionalOnMissingBean(name = "bizDataSource")
+    @ConfigurationProperties(prefix="spring.datasource.hikari")
+    public DataSource bizDataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+
+    /*
+    @Bean
+    @Primary
+    @ConfigurationProperties("spring.datasource")
+    public DataSourceProperties bizDatasourceProperties() {
+        return new DataSourceProperties();
+    }
+    @Bean
+    @Primary
+    public DataSource bizDataSource() {
+        return bizDatasourceProperties().initializeDataSourceBuilder()
+                .type(HikariDataSource.class).build();
+    }
+    */
 }

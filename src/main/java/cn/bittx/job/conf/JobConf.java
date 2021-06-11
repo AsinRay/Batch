@@ -1,5 +1,7 @@
 package cn.bittx.job.conf;
 
+import cn.bittx.job.bean.Platform;
+import cn.bittx.job.repo.PlatformRepo;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -15,6 +17,9 @@ import javax.annotation.Resource;
 
 @Configuration
 public class JobConf {
+
+    @Resource
+    private PlatformRepo platformRepo;
 
     @Resource
     private JobBuilderFactory jobBuilderFactory;
@@ -41,6 +46,8 @@ public class JobConf {
                 .build();
     }
 
+
+
     @Bean
     public Step step1(){
         return stepBuilderFactory.get("step1")
@@ -48,6 +55,10 @@ public class JobConf {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
                         System.out.println("Hello Spring Batch, Step 1");
+                        System.out.println(platformRepo.getVersion());
+                        Platform p = new Platform();
+                        p.setVersion("ha.cn " + System.currentTimeMillis());
+                        platformRepo.saveAndFlush(p);
                         return RepeatStatus.FINISHED;
                     }
                 }).build();
